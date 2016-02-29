@@ -16,8 +16,6 @@
 
   <repo>https://github.com/corinzio/cordova-plugin-google-signin.git</repo>
 
-  <issue>https://github.com/EddyVerbruggen/cordova-plugin-googleplus/issues</issue>
-
   <engines>
     <engine name="cordova" version=">=4.0.0"/>
   </engines>
