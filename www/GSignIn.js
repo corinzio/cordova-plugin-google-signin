@@ -9,7 +9,7 @@ var gsigninExport = {};
 
 
 gsigninExport.echo =  function(successCallback, errorCallback, msg){
-  exec(successCallback, errorCallback, msg);
+  cordova.exec(successCallback, errorCallback, msg);
 };
 
 module.exports = gsigninExport;
