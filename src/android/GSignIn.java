@@ -21,12 +21,10 @@ public class GSignIn extends CordovaPlugin{
   @Override
   public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
       if ("echo".equals(action)) {
-          final long duration = args.getLong(0);
-          final String message = args.getString(0);
+          final String msg = args.optString(0,"void");
           cordova.getThreadPool().execute(new Runnable() {
               public void run() {
-
-                  callbackContext.success(message); // Thread-safe.
+                  callbackContext.success(msg); // Thread-safe.
               }
           });
           return true;
