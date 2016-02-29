@@ -8,7 +8,7 @@
 var gsigninExport = {};
 
 
-gsinginExport.echo =  function(successCallback, errorCallback, msg){
+gsigninExport.echo =  function(successCallback, errorCallback, msg){
   exec(successCallback, errorCallback, msg);
 };
 

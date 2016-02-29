@@ -1,9 +1,7 @@
 package tumblr.corinzio.cordova.plugins.signin;
 
 import android.util.Log;
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.CordovaResourceApi;
+import org.apache.cordova.*;
 import org.apache.cordova.LOG;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
