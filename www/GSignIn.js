@@ -5,16 +5,11 @@
  * @exports gsignin
  */
 var gsigninExport = {};
+gsigninExport.ACTION_LOGOUT = "logout";
 gsigninExport.ACTION_LOGIN = "login";
 gsigninExport.ACTION_CONFIG = "config";
-gsigninExport.ACTION_ECHO = "echo";
 gsigninExport.SERVICE = "signin";
-gsigninExport.echo = function(successCallback, errorCallback, msg) {
-  console.log("executing echo");
-  var args = [];
-  args.push(msg);
-  cordova.exec(successCallback, errorCallback, gsigninExport.SERVICE, gsigninExport.ACTION_ECHO, args);
-};
+
 gsigninExport.config = function(successCallback, errorCallback, conf) {
   console.log("executing config");
   var args = [];
@@ -26,4 +21,11 @@ gsigninExport.login = function(successCallback, errorCallback) {
   var args = [];
   cordova.exec(successCallback, errorCallback, gsigninExport.SERVICE, gsigninExport.ACTION_LOGIN, args);
 };
+gsigninExport.logout = function(successCallback, errorCallback){
+  console.log("executing logout");
+  var args = [];
+  cordova.exec(successCallback, errorCallback, gsigninExport.SERVICE, gsigninExport.ACTION_LOGOUT, args);
+};
+
+
 module.exports = gsigninExport;
