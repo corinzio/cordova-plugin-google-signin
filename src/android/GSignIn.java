@@ -233,6 +233,8 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
         GoogleSignInOptions.Builder gsoBuilder;
         GoogleSignInOptions gso;
         String serv_id;
+		String scopes;
+		String[] scope_list;
 
         /** Get Configurations options **/
         try {
@@ -240,12 +242,25 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
         } catch (JSONException e) {
             serv_id = "";
         }
+		
+		try {
+			scopes = conf.getString(GSignIn.CONFIG_SCOPES);
+		} catch (JSONException e){
+			scopes = "";
+		}
 
         gsoBuilder = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestId();
         /** add backend server clientid **/
         if (!serv_id.equals("")) gsoBuilder.requestIdToken(serv_id);
+		/** add request scopes **/
+		if(!scopes.equals("")) {
+			scope_list = scopes.split("\\s+");
+			for( String scope: scope_list){
+				gsoBuilder
+			}
+		}
         /** create options **/
         gso = gsoBuilder.build();
 
