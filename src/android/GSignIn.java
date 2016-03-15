@@ -15,6 +15,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 
 import org.apache.cordova.CallbackContext;
@@ -44,6 +45,9 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
      * CONFIG OPTIONS
      **/
     private static final String CONFIG_SERVERID = "server_client_id";
+    private static final String CONFIG_SCOPES = "scopes";
+    private static final String CONFIG_AUTHCODE = GSignIn.LOGIN_AUTHCODE;
+    private static final String CONFIG_REFRESH = "refresh";
 
     /**
      * ERRORS JSON OBJECT PARAMETERS
@@ -232,22 +236,30 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
     private void configureSignIn(JSONObject conf) {
         GoogleSignInOptions.Builder gsoBuilder;
         GoogleSignInOptions gso;
+        boolean auth_code = false;
+        boolean force_refresh = false;
         String serv_id;
 		String scopes;
 		String[] scope_list;
 
         /** Get Configurations options **/
+        //server client id
         try {
             serv_id = conf.getString(GSignIn.CONFIG_SERVERID);
         } catch (JSONException e) {
             serv_id = "";
         }
-		
+		//scopes list
 		try {
 			scopes = conf.getString(GSignIn.CONFIG_SCOPES);
 		} catch (JSONException e){
 			scopes = "";
 		}
+        //authcode
+        if(!serv_id.equals("")){
+           auth_code = conf.optBoolean(GSignIn.CONFIG_AUTHCODE, false);
+           if(auth_code) force_refresh = conf.optBoolean(GSignIn.CONFIG_REFRESH,false);
+        }
 
         gsoBuilder = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -258,9 +270,13 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
 		if(!scopes.equals("")) {
 			scope_list = scopes.split("\\s+");
 			for( String scope: scope_list){
-				gsoBuilder
+                gsoBuilder.requestScopes(new Scope(scope));
 			}
 		}
+        /** add auth request **/
+        if(auth_code){
+            gsoBuilder.requestServerAuthCode(serv_id, force_refresh);
+        }
         /** create options **/
         gso = gsoBuilder.build();
 
