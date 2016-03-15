@@ -1,10 +1,9 @@
 # Google Sign-In Cordova/PhoneGap Plugin
 
 ## 0. Index
-
 1. [Description](#1-description)
 2. [Screenshots](#2-screenshots)
-3. [Installation] (CLI / Plugman)](#3-installation-phonegap-cli--cordova-cli)
+3. [Installation (CLI / Plugman)](#3-installation-phonegap-cli--cordova-cli)
 4. [Usage](#4-usage)
 5. [API Documentation](#5-API-documentation)
 6. [Changelog](#6-changelog)
