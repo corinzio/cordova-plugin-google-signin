@@ -30,17 +30,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * This class manage the Google Sign In flow
  */
 public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
-    // --Commented out by Inspection (07/03/2016 23:15):private static final String ERROR_APICLIENT_NOT_CONNECTED = "Google Api Client not connected";
+
     private static final String LOG_TAG = "GSignIn";
     /**
      * ACTIONS
      **/
     private static final String ACT_CONFIG = "config";
-    private static final String ACT_CONNECT = "connect";
     private static final String ACT_LOGIN = "login";
     private static final String ACT_LOGOUT = "logout";
     private static final String ACT_REVOKE = "revoke";
-    private static final String ACT_SILENT = "silent";
+
+    /**
+     * LOGIN OPTION
+     */
+    private static final String LOGIN_CFG_SILENT = "silent";
+
     /**
      * CONFIG OPTIONS
      **/
@@ -74,6 +78,8 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
     private static final int ERRCODE_CONNECTION_SUSPENDED = 403;
     private static final int ERRCODE_LOGIN_FAILED = 404;
     private static final int ERRCODE_LOGOUT_FAILED = 405;
+    private static final int ERRCODE_NOT_CONNECTED = 406;
+    private static final int ERRCODE_REVOKE_FAILED = 407;
     /**
      * ERRORS MESSAGE
      **/
@@ -82,6 +88,8 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
     private static final String ERRMSG_SRV_KILLED = "Service killed, automatic retry...";
     private static final String ERRMSG_LOGIN_FAILED = "Login Failed";
     private static final String ERRMSG_LOGOUT_FAILED = "Logout Failed";
+    private static final String ERRMSG_NOT_CONNECTED = "Api not connected";
+    private static final String ERRMSG_REVOKE_FAILED = "Revoke failed:";
 
     /**
      * REQUEST CODES
@@ -93,6 +101,7 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
     private CallbackContext loginCallback;
     private CallbackContext connectCallback;
     private CallbackContext logoutCallback;
+    private CallbackContext revokeCallback;
 
     /**
      * @param action          The action to execute.
@@ -122,40 +131,106 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
             }
             return true;
         }
-        if (action.equals(GSignIn.ACT_CONNECT)) {
-            this.setConnectCallback(callbackContext);
-            this.connect();
-            return true;
-        }
+        /**
+         * Login
+         */
         if (action.equals(GSignIn.ACT_LOGIN)) {
-            this.setLoginCallback(callbackContext);
-            this.signIn();
+            if(this.check_api(callbackContext)) {
+                this.setLoginCallback(callbackContext);
+                this.signIn();
+            }
             return true;
         }
+        /**
+         * Logout
+         */
         if (action.equals(GSignIn.ACT_LOGOUT)) {
-            this.setLogoutCallback(callbackContext);
-            this.signOut();
+            if(this.check_api(callbackContext)) {
+                this.setLogoutCallback(callbackContext);
+                this.signOut();
+            }
             return true;
         }
-        if (action.equals(GSignIn.ACT_SILENT)) {
-            if( callbackContext != null ) this.setLoginCallback(callbackContext);
-            this.trySilentSignIn();
+        /**
+         * Revoke
+         */
+        if (action.equals(GSignIn.ACT_REVOKE)){
+            if(this.check_api(callbackContext)) {
+                this.setRevokeCallback(callbackContext);
+            }
             return true;
         }
         return false;
     }
 
+    private synchronized boolean check_api(final CallbackContext callbackContext){
+        //verify if operations are running
+        boolean isFree = this.m_running.compareAndSet(false,true);
+        if(!isFree){
+            //operations already running
+            return false;
+        }
+        if(this.getM_gApiClient() == null){
+            //no api configured
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put(GSignIn.ERROR_CODE,GSignIn.ERRCODE_NO_APICLIENT);
+                obj.put(GSignIn.ERROR_MSG,GSignIn.ERRMSG_NO_APICLIENT);
+                callbackContext.error(obj);
+                return false;
+            } catch (JSONException e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+        if(!this.getM_gApiClient().isConnected()){
+            //api not connected
+            try{
+                JSONObject obj = new JSONObject();
+                obj.put(GSignIn.ERROR_CODE,GSignIn.ERRCODE_NOT_CONNECTED);
+                obj.put(GSignIn.ERROR_MSG, GSignIn.ERRMSG_NOT_CONNECTED);
+                callbackContext.error(obj);
+                return false;
+            }catch (JSONException e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void revoke() {
+        final GoogleApiClient api = this.getM_gApiClient();
+        Auth.GoogleSignInApi.revokeAccess(api).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        GSignIn.this.m_running.set(false);
+                        if(status.isSuccess()){
+                            GSignIn.this.getRevokeCallback().success();
+                        }else{
+                            try {
+                                JSONObject obj = new JSONObject();
+                                obj.put(GSignIn.ERROR_CODE, GSignIn.ERRCODE_REVOKE_FAILED);
+                                obj.put(GSignIn.ERROR_MSG, GSignIn.ERRMSG_REVOKE_FAILED + ": " + status.getStatusMessage());
+                                GSignIn.this.getLogoutCallback().error(obj);
+                            }catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+    }
 
     private void signOut() {
         final GoogleApiClient api = this.getM_gApiClient();
-        /** lazy evaluation **/
-        if (api != null && this.m_running.compareAndSet(false, true) && api.isConnected()) {
             this.cordova.getThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
                     Auth.GoogleSignInApi.signOut(api).setResultCallback(new ResultCallback<Status>() {
                         @Override
                         public void onResult(@NonNull Status status) {
+                            //operation ended
                             GSignIn.this.m_running.set(false);
                             if (status.isSuccess()) {
                                 GSignIn.this.getLogoutCallback().success();
@@ -173,23 +248,12 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
                     });
                 }
             });
-        }
     }
 
     private void signIn() {
         //use of lazy evaluation
         final GoogleApiClient api = this.getM_gApiClient();
-        if (api == null || !api.isConnected()) {
-            try {
-                this.getLoginCallback().error(new JSONObject().put(GSignIn.ERROR_CODE, GSignIn.ERRCODE_NO_APICLIENT).put(GSignIn.ERROR_MSG, GSignIn.ERRMSG_NO_APICLIENT));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return;
-        }
         /** starts login process **/
-        if (this.m_running.compareAndSet(false, true)) {
-            // try to login
             this.cordova.getThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
@@ -199,7 +263,6 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
                     cordova.getActivity().startActivityForResult(signInIntent, RC_SIGN_IN);
                 }
             });
-        }
     }
 
     /**
@@ -311,6 +374,7 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
 
     @Override
     public void onConnectionSuspended(int i) {
+        Log.d(GSignIn.LOG_TAG, "onConnectionSuspended");
         JSONObject obj = new JSONObject();
         String msg;
         int code;
@@ -346,6 +410,7 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+            //operation completed
             this.m_running.getAndSet(false);
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
@@ -422,10 +487,12 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
             public void run() {
                 OptionalPendingResult<GoogleSignInResult> pendingResult = Auth.GoogleSignInApi.silentSignIn(api);
                 if(pendingResult.isDone()){
+                    //operation completed
                     GSignIn.this.m_running.set(false);
                     GSignIn.this.handleSignInResult(pendingResult.get());
                 }
                 else{
+                    //operation copmpleted
                     pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                         @Override
                         public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
@@ -437,5 +504,19 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
 
             }
         });
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Log.d(GSignIn.LOG_TAG,"Cordova plugin destroyed");
+    }
+
+    private CallbackContext getRevokeCallback() {
+        return revokeCallback;
+    }
+
+    private void setRevokeCallback(CallbackContext revokeCallback) {
+        this.revokeCallback = revokeCallback;
     }
 }
