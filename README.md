@@ -24,7 +24,12 @@ TODO
 TODO
 
 ## 5. API Documentation
-You can find the plugin API documentation [here](http://corinzio.github.io/cordova-plugin-google-signin/)
+You can find the plugin API documentation [here](http://corinzio.github.io/cordova-plugin-google-signin/)  
+It is possible to use jsdoc to generate the documentation with the command:
+```
+jsdoc -c jsdoc.conf -t node_modules/minami www/GSignIn.js
+```
+
 
 ## 6. Changelog
 - 0.0.1: Initial version
