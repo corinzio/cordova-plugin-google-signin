@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="gsignin.html">gsignin</a><ul class='methods'><li data-type='method'><a href="gsignin.html#.config">config</a></li><li data-type='method'><a href="gsignin.html#.login">login</a></li><li data-type='method'><a href="gsignin.html#.logout">logout</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="gsignin.html">gsignin</a><ul class='methods'><li data-type='method'><a href="gsignin.html#.config">config</a></li><li data-type='method'><a href="gsignin.html#.login">login</a></li><li data-type='method'><a href="gsignin.html#.logout">logout</a></li><li data-type='method'><a href="gsignin.html#.revoke">revoke</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -269,7 +269,7 @@ In the conf parameter it is possible to configure wich informations will be sent
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line30">line 30</a>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -300,7 +300,7 @@ In the conf parameter it is possible to configure wich informations will be sent
 
     
 
-    <h4 class="name" id=".login"><span class="type-signature">(static) </span>login<span class="signature">(successCallback, errorCallback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".login"><span class="type-signature">(static) </span>login<span class="signature">(successCallback, errorCallback, silent)</span><span class="type-signature"></span></h4>
 
     
 
@@ -382,7 +382,30 @@ In the conf parameter it is possible to configure wich informations will be sent
 
             
 
-            <td class="description last"><p>callback called whem the login ends with error</p></td>
+            <td class="description last"><p>callback called when the login ends with error</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>silent</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>true for trying silent login</p></td>
         </tr>
 
     
@@ -423,7 +446,7 @@ In the conf parameter it is possible to configure wich informations will be sent
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line61">line 61</a>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -454,7 +477,7 @@ In the conf parameter it is possible to configure wich informations will be sent
 
     
 
-    <h4 class="name" id=".logout"><span class="type-signature">(static) </span>logout<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".logout"><span class="type-signature">(static) </span>logout<span class="signature">(successCallback, errorCallback)</span><span class="type-signature"></span></h4>
 
     
 
@@ -470,6 +493,78 @@ In the conf parameter it is possible to configure wich informations will be sent
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>callback called when the revoke operation has been executed succesfully</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="gsignin.html#.cbError">gsignin.cbError</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>callback called when the revoke operation ends with error</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -505,7 +600,161 @@ In the conf parameter it is possible to configure wich informations will be sent
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line74">line 74</a>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line82">line 82</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".revoke"><span class="type-signature">(static) </span>revoke<span class="signature">(successCallback, errorCallback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>revoke operation</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>callback called when the revoke operation has been executed succesfully</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="gsignin.html#.cbError">gsignin.cbError</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>callback called when the revoke operation ends with error</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -642,7 +891,7 @@ In the conf parameter it is possible to configure wich informations will be sent
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line24">line 24</a>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -751,6 +1000,99 @@ In the conf parameter it is possible to configure wich informations will be sent
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>scopes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>List of scopes separated by space</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>auth_code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>if true request server side access for server_client_id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>refresh</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>forceRefresh for server side access</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -786,7 +1128,7 @@ In the conf parameter it is possible to configure wich informations will be sent
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line12">line 12</a>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -858,7 +1200,7 @@ In the conf parameter it is possible to configure wich informations will be sent
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line19">line 19</a>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -900,6 +1242,8 @@ In the conf parameter it is possible to configure wich informations will be sent
 <li>403 The connection has been suspended.</li>
 <li>404 Login Failure</li>
 <li>405 Logout Failure</li>
+<li>406 Not Conencted</li>
+<li>407 Revoke Error</li>
 </ul>
 </div>
 
@@ -1023,7 +1367,7 @@ In the conf parameter it is possible to configure wich informations will be sent
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line90">line 90</a>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line114">line 114</a>
     </li></ul></dd>
     
 
@@ -1224,7 +1568,7 @@ Based on the configuration object used in config function the object can have le
 
             
 
-            <td class="description last"><p>.</p></td>
+            <td class="description last"><p>Auth token for server side api access</p></td>
         </tr>
 
     
@@ -1263,7 +1607,7 @@ Based on the configuration object used in config function the object can have le
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line48">line 48</a>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -1384,7 +1728,7 @@ Based on the configuration object used in config function the object can have le
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line107">line 107</a>
+        <a href="GSignIn.js.html">GSignIn.js</a>, <a href="GSignIn.js.html#line133">line 133</a>
     </li></ul></dd>
     
 
@@ -1426,7 +1770,7 @@ Based on the configuration object used in config function the object can have le
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Mar 11 2016 21:02:02 GMT+0100 (ora solare Europa occidentale) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Mar 23 2016 22:00:16 GMT+0100 (ora solare Europa occidentale) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
