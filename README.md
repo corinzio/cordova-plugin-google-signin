@@ -15,10 +15,8 @@ The plugin can be configured to get an authentication token to use it with a spe
 
 ## 2. Screenshots
 ### Android
-
-| Start page | After login button is pressed |
-| - | -
-|![base](https://raw.githubusercontent.com/corinzio/cordova-plugin-google-signin/master/screen/base.png)  | ![select](https://raw.githubusercontent.com/corinzio/cordova-plugin-google-signin/master/screen/select.png)  
+<img src="https://raw.githubusercontent.com/corinzio/cordova-plugin-google-signin/master/screen/base.png" width="235" height="400"/>
+<img src="https://raw.githubusercontent.com/corinzio/cordova-plugin-google-signin/master/screen/select.png" width="235" height="400"/>
 
 ## 3. Installation (Cordova CLI)
 At the moment the plugin is not released as a npm package but you can install latest version directly from git repository with the command:  
