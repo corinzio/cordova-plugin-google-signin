@@ -137,7 +137,12 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
         if (action.equals(GSignIn.ACT_LOGIN)) {
             if(this.check_api(callbackContext)) {
                 this.setLoginCallback(callbackContext);
-                this.signIn();
+                if(args.optBoolean(0,false)){
+                    this.trySilentSignIn();
+                }
+                else {
+                    this.signIn();
+                }
             }
             return true;
         }

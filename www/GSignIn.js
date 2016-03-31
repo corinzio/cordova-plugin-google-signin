@@ -75,7 +75,7 @@ gsigninExport.login = function(successCallback, errorCallback, silent) {
   var bool = false;
   if(silent) bool = true;
   var args = [];
-  args.push(silent);
+  args.push(bool);
   cordova.exec(successCallback, errorCallback, gsigninExport.SERVICE, gsigninExport.ACTION_LOGIN, args);
 };
 
