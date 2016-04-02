@@ -484,9 +484,6 @@ public class GSignIn extends CordovaPlugin implements GoogleApiClient.OnConnecti
 
     private void trySilentSignIn(){
         final GoogleApiClient api = this.getM_gApiClient();
-        if(api == null || !this.m_running.compareAndSet(false,true) || !api.isConnected()){
-            return;
-        }
         this.cordova.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
