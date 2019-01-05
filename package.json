@@ -1,5 +1,25 @@
 {
-  "devDependencies": {
-    "minami": "^1.1.1"
-  }
+  "version": "0.0.1",
+  "name": "cordova-plugin-google-signin",
+  "cordova_name": "GoogleSignIn",
+  "description": "Google sign in for Cordova.",
+  "license": "MIT",
+  "repo": "https://github.com/corinzio/cordova-plugin-google-signin.git",
+  "keywords": [
+    "Google",
+    "Google SignIn",
+    "Google Sign In",
+    "GoogleSignIn",
+    "Authentication",
+    "cordova-android"
+  ],
+  "platforms": [
+    "android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=4.0.0"
+    }
+  ]
 }
